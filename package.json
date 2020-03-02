@@ -1,0 +1,18 @@
+{
+  "name": "vue-on-screen",
+  "version": "1.0.3",
+  "description": "verify dom is in screen",
+  "main": "index.js",
+  "scripts": {
+    "test": "v-on-screen"
+  },
+  "keywords": [
+    "vue",
+    "on",
+    "screen",
+    "check",
+    "view"
+  ],
+  "author": "xuqinghua",
+  "license": "ISC"
+}
