@@ -7,7 +7,7 @@ npm i vue-on-screen
 ```
 
 ```
-
+//在vue的main.js文件中添加如下代码
 import vueOnScreen from 'vue-on-screen'
 Vue.use(vueOnScreen)
 
