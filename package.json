@@ -1,12 +1,12 @@
 {
   "name": "vue-on-screen",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "verify dom is in screen",
   "main": "index.js",
   "scripts": {
     "test": "v-on-screen"
   },
-  "repository":"https://github.com/xuqinghua/vue-on-screen",
+  "repository": "https://github.com/xuqinghua/vue-on-screen",
   "keywords": [
     "vue",
     "on",
