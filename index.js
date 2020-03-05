@@ -1,7 +1,5 @@
 'use strict'
-/** 
- * https://www.npmjs.com/package/vue-check-view
- * stevenqhxu 参考这个改造的，扩展性更好一些。
+/**
  * 1.支持传参最小高度和最小宽度的
  * 2.支持宽度的判断
  * 3.支持更多的参数返回
