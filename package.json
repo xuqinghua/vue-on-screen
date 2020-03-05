@@ -6,6 +6,7 @@
   "scripts": {
     "test": "v-on-screen"
   },
+  "repository":"https://github.com/xuqinghua/vue-on-screen",
   "keywords": [
     "vue",
     "on",
