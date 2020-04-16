@@ -33,7 +33,11 @@ function getPlugin() {
     }
 
     function createInstance(Vue, options) {
+
         const items = {},
+            defaultCallBk = options.callbk || function(){},
+            defaultMinShowHeight = options.minShowHeight || 1,
+            defaultMinShowWidth =  options.minShowWidth || 1,
             scrollThrottledHandler = throttle(scrollHandler, 40);
 
         let scrollValue = window.pageYOffset,
@@ -73,38 +77,44 @@ function getPlugin() {
                     elementRight = elementLeft + rect.width; //元素的右边距离文档的左边的距离
                 let elementHeight = element.offsetHeight;
                 let elementWidth = element.offsetWidth;
-                let minShowHeight = i.minShowHeight || 1, //最小展示高度 表示要超过该高度才算展示。小于这个高端算不展示
-                    minShowWidth = i.minShowWidth || 1; //最小展示宽度 表示要超过该宽度才算展示。小于这个高端算不展示
+                //console.log(element,rect);
+                let minShowHeight = i.minShowHeight || defaultMinShowHeight, //最小展示高度 表示要超过该高度才算展示。小于这个高端算不展示
+                    minShowWidth = i.minShowWidth || defaultMinShowWidth; //最小展示宽度 表示要超过该宽度才算展示。小于这个高端算不展示
                 //如果指定的高度大于元素高度，则用元素的高度或者宽度，即表示元素完全暴露在屏幕内。
                 //isForceHeight 强制是否强制使用传入的高度，isForceWidth 强制是否强制使用传入的宽度。为true表示不再和元素的高度或者宽度求最小值了。主要解决一些元素因为是动态插入的，导致初始的elementHeight是0或者很小。
                 minShowHeight = minShowHeight > elementHeight && !i.isForceHeight ? elementHeight : minShowHeight;
                 minShowWidth = minShowWidth > elementWidth && !i.isForceWidth ? elementWidth : minShowWidth;
                 let isTopIn = false,
-                    isTopInOnePixMore,
+                    isTopInOnePixMore = false,
                     isBottomIn = false,
                     isBottomInOnePixMore = false,
                     isLeftIn = false,
                     isLeftInOnePixMore = false,
                     isRightIn = false,
                     isRightInOnePixMore = false;
-                if (rect.top >= 0) { //顶部视口还没有贴到当前元素
+                if (rect.top >= 0 && rect.height > 0 &&  rect.width > 0) { //顶部视口还没有贴到当前元素
                     isTopIn = viewportHeight - rect.top >= minShowHeight;
                     isTopInOnePixMore = viewportHeight - rect.top > 0; //表示已经进入了，且超过1像素。
-                } else { //已经有一部分消失在顶部了，剩余的是否足够算展示
+                } else if(rect.height > 0 &&  rect.width > 0){ //已经有一部分消失在顶部了，剩余的是否足够算展示
                     isBottomIn = rect.top + elementHeight >= minShowHeight;
                     isBottomInOnePixMore = rect.top + elementHeight >= 0; //表示已经进入了，且超过1像素。
                 }
 
-                if (rect.left >= 0) {
+                if (rect.left >= 0 && rect.height > 0 &&  rect.width > 0) {
                     isLeftIn = viewportWidth - rect.left >= minShowWidth;
                     isLeftInOnePixMore = viewportWidth - rect.left > 0; //表示已经进入了，且超过1像素。
-                } else {
+                } else if(rect.height > 0 &&  rect.width > 0){
                     isRightIn = elementWidth + rect.left >= minShowWidth;
                     isRightInOnePixMore = elementWidth + rect.left > 0; //表示已经进入了，且超过1像素。
                 }
 
-                let isInView = (isTopIn || isBottomIn) && (isRightIn || isLeftIn);
-                let isInViewOnePixMore = (isTopInOnePixMore || isBottomInOnePixMore) && (isRightInOnePixMore || isLeftInOnePixMore);
+                let isInView = false;
+                let isInViewOnePixMore = false;
+                if(rect && rect.height > 0 &&  rect.width > 0){ //如果元素高度和宽度为0 表示可能被 display:none;掉 所以理解不在屏幕内
+                    isInView = (isTopIn || isBottomIn) && (isRightIn || isLeftIn);
+                    isInViewOnePixMore = (isTopInOnePixMore || isBottomInOnePixMore) && (isRightInOnePixMore || isLeftInOnePixMore);
+                }
+                
                 // 头部进入view viewportBottom - elementTop 
                 // 底部进入view elementBottom - viewportTop
                 let onScreenHeigh = isTopInOnePixMore || isBottomInOnePixMore ? ((isBottomInOnePixMore ? elementBottom : viewportBottom) - (isTopInOnePixMore ? elementTop : viewportTop)) : 0;
@@ -136,6 +146,7 @@ function getPlugin() {
                     isRight,
                     rect
                 }
+                //console.log(showResult)
                 return showResult;
             }
 
@@ -183,20 +194,20 @@ function getPlugin() {
                         percent: -1,
                         rect: {}
                     }
-
+                //console.log(defaultCallBk);
                 //bind的value 支持 对象
                 let bValue = bind.value;
                 if (bind.modifiers && (bind.modifiers.once || bind.modifiers.onceenter)) { //进入只执行一次
-                    item.onceenter = bValue.callbk
+                    item.onceenter = bValue.callbk || defaultCallBk
                 }
                 if (bind.modifiers && bind.modifiers.onceexit) { //退出调用一次
-                    item.onceexit = bValue.callbk
+                    item.onceexit = bValue.callbk|| defaultCallBk
                 }
                 if (bind.modifiers && bind.modifiers.always) { //总是调用,不管在不在屏幕内
-                    item.always = bValue.callbk
+                    item.always = bValue.callbk|| defaultCallBk
                 }
                 if (!bind.modifiers.once && !bind.modifiers.onceenter && !bind.modifiers.onceexit && !bind.modifiers.always) {
-                    item.handler = bValue.callbk
+                    item.handler = bValue.callbk|| defaultCallBk
                 }
                 //minShowHeight要考虑底部tab导航被遮挡的问题高度。
                 Object.assign(item, bValue);
