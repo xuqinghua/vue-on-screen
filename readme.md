@@ -10,9 +10,9 @@ npm i vue-on-screen
 
 import vueOnScreen from 'vue-on-screen'
 Vue.use(vueOnScreen,{
-    minShowHeight:20, //默认的最小展示高度判断设置
-    minShowWidth:1,//默认的最小展示宽度判断设置
-    callbk:function(e){ //默认的回调函数设置
+    minShowHeight:20,//默认的最小展示高度判断设置
+    minShowWidth:1,//默认的最小展示宽度判断设置
+    callbk:function(e){//默认的回调函数设置
         
     }
 })
