@@ -4,11 +4,7 @@
   * @description verify dom is in screen
   * @license MIT
   */
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Index = factory());
-}(this, (function () { 'use strict';
+'use strict';
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -246,6 +242,4 @@ function getPlugin() {
 }
 });
 
-return dist;
-
-})));
+module.exports = dist;
