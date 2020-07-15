@@ -52,7 +52,7 @@ funtion onScreenCallbk (e) {
     console.log(e.eventType) // 'enter' 'exit' 'process' 表示当前元素在屏幕的位置
     console.log(e.isInView) // 是否在页面内展示了
     console.log(e.isTopIn）// 是否顶部在页面内
-    console.log(e.isBottomIn) //是否底部在页面内
+    console.log(e.isBottomIn) //是否底部在页面(仅针对盒子大小小于一个屏幕高度的，如果大于一个屏幕，这个值可能不准，建议用isBottomInOnePixMore)
     console.log(e.isLeftIn) //是否左边缘在页面内
     console.log(e.isRightIn) //是否右边缘在页面内
     console.log(e.onScreenHeigh) //展示出来的高度PX
