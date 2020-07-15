@@ -25,13 +25,6 @@ function getPlugin() {
             }, timeout)
         }
     }
-    /**
-     * 百分比，避免浮点问题
-     */
-    function roundPercent(v) {
-        return (v * 1000 | 0) / 1000
-    }
-
     function createInstance(Vue, options) {
 
         const items = {},
@@ -55,14 +48,14 @@ function getPlugin() {
         //   scrollThrottledHandler();
         // });
 
-        function scrollHandler(e) {
+        function scrollHandler() {
             let viewportTop = window.pageYOffset, //当前滚动的上下的距离
                 viewportBottom = window.pageYOffset + window.document.documentElement.clientHeight,
                 viewportLeft = window.pageXOffset, //左右滚动的距离
                 viewportRight = window.pageXOffset + window.document.documentElement.clientWidth,
                 viewportHeight = window.document.documentElement.clientHeight, //页面可视化窗口高度
-                viewportWidth = window.document.documentElement.clientWidth, //页面可视化窗口宽度
-                documentHeight = window.document.documentElement.scrollHeight; //页面全文高度
+                viewportWidth = window.document.documentElement.clientWidth; //页面可视化窗口宽度
+                //documentHeight = window.document.documentElement.scrollHeight; //页面全文高度
             //documentWidth = window.document.documentElement.scrollWidth, //页面宽度 暂时用不到
             //scrollPercent = roundPercent(window.pageYOffset / (documentHeight - viewportHeight)); //滚动的长度占可滚动高度的占比
 
@@ -94,6 +87,7 @@ function getPlugin() {
                     isRightInOnePixMore = false;
                 if (rect.top >= 0 && rect.height > 0 &&  rect.width > 0) { //顶部视口还没有贴到当前元素
                     isTopIn = viewportHeight - rect.top >= minShowHeight;
+                    isBottomIn = viewportHeight - rect.bottom >= 0;
                     isTopInOnePixMore = viewportHeight - rect.top > 0; //表示已经进入了，且超过1像素。
                 } else if(rect.height > 0 &&  rect.width > 0){ //已经有一部分消失在顶部了，剩余的是否足够算展示
                     isBottomIn = rect.top + elementHeight >= minShowHeight;
